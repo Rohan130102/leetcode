@@ -1,0 +1,87 @@
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    public ListNode last(ListNode head){
+    while(head.next!=null){
+        head=head.next;
+    }
+    return head;
+}
+public ListNode mergeKLists(ListNode[] lists) {
+    
+    
+    ListNode temp=new ListNode(0),temp1=temp;
+    for(int i=0;i<lists.length;i++){
+        temp.next=lists[i];
+        if(temp.next==null){
+            continue;
+        }
+        temp=last(temp.next);
+        
+        // System.out.println(lists[i]);
+    }
+    return  sort(temp1.next);
+}
+public ListNode sort(ListNode head){
+    if(head==null || head.next==null){
+        return head;
+    }
+    ListNode mid=getmid(head);
+    ListNode nextmid=mid.next;
+    mid.next=null;
+    
+    ListNode left=sort(head);
+    ListNode right=sort(nextmid);
+    
+    return merg(left,right);
+    
+}
+public ListNode getmid(ListNode head){
+    ListNode fast=head,slow=head;
+    while(fast.next!=null && fast.next.next!=null){
+        slow=slow.next;
+        fast=fast.next.next;
+    }
+    return slow;
+}
+public ListNode merg(ListNode left,ListNode right){
+    if(left==null){
+        return right;
+    }
+    if(right==null){
+        return left;
+    }
+    
+    ListNode nm=new ListNode(0),m=nm;
+    while(left!=null && right!=null){
+        if(left.val<right.val){
+            nm.next=new ListNode(left.val);
+            left=left.next;
+        }
+        else{
+            nm.next=new ListNode(right.val);
+            right=right.next;
+        }
+        nm=nm.next;
+    }
+    while(left!=null){
+        nm.next=new ListNode(left.val);
+        nm=nm.next;
+        left=left.next;
+    }
+    while(right!=null){
+        nm.next=new ListNode(right.val);
+        nm=nm.next;
+        right=right.next;
+    }
+    return m.next;  
+}
+}
